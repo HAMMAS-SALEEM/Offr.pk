@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/app/utils/db'
 import { hash } from 'bcrypt'
+import * as z from 'zod'
+
+
+const userSchema = z.object({
+  name: z.string().min(3, 'Name must be at least 3 characters long'),
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
+  email: z.email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters long')
+})
 
 export async function GET () {
   const allUsers = await db.user.findMany();
@@ -11,15 +20,13 @@ export async function POST (req) {
   try {
     const body = await req.json()
 
-    const { name, username, email, password } = body
+    const { name, username, email, password } = userSchema.parse(body)
     if (!name || !username || !email || !password) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
       )
     }
-
-    console.log(db)
 
     const existingUsername = await db.user.findUnique({
       where: { username: username }
