@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { useRouter } from 'next/navigation'
 
 const schema = yup.object({
-  fullName: yup
+  name: yup
     .string()
     .required('Full name is required')
     .min(3, 'Full name must be at least 3 characters'),
@@ -32,9 +32,26 @@ const Register = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
     console.log('Registration Data:', data)
-    // API call goes here
+    const response = await fetch('/api/user',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+      const result = await response.json()
+      console.log('User created:', result)
+      alert('Registration successful! Redirecting to login...')
+      router.push('/auth/login')
+    } else {
+        const errorData = await response.json()
+        console.error('Error creating user:', errorData)
+        alert(`Registration failed: ${errorData.error || 'Unknown error'}`)
+    }
   }
 
   const redirectToLogin = () => router.push('/auth/login')
@@ -47,11 +64,11 @@ const Register = () => {
           <input
             type='text'
             placeholder='Full Name'
-            {...register('fullName')}
+            {...register('name')}
             className='w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
           />
           <p className='text-red-500 text-sm mt-1'>
-            {errors.fullName?.message}
+            {errors.name?.message}
           </p>
         </div>
 

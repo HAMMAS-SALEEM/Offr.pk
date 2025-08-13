@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/app/utils/db'
+import { db } from '@/app/lib/db'
 import { hash } from 'bcrypt'
 import * as z from 'zod'
 
