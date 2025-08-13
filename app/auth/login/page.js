@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 const schema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -21,9 +22,17 @@ const Login = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = data => {
-    console.log('Login data:', data)
-    // call API here
+  const onSubmit = async data => {
+    const signedInData = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    })
+    if (signedInData?.error) {
+      console.log('Login failed:', signedInData.error)
+    } else {
+      router.push('/admin')
+    }
   }
 
   const redirectToSignUp = () => router.push('/auth/register')
