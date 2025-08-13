@@ -146,4 +146,4 @@ This app can be deployed **entirely on Vercel** since Next.js API routes work as
 
 ## 📄 License
 
-MIT License © 2025 Offr-PK
+[MIT License](./LICENSE) © 2025 Offr.pk
