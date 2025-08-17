@@ -1,6 +1,6 @@
 # Offr-PK
 
-Offr-PK is a **Next.js 15** application built with the **App Router**, **TypeScript**, **Prisma**, and **PostgreSQL**.  
+Offr-PK is a **Next.js 15** application built with the **App Router**, **TypeScript**, **Prisma**, and **PostgreSQL**.
 It allows shopkeepers to post local offers and customers to explore them.
 
 ---
